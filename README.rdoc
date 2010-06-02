@@ -1,0 +1,14 @@
+= Clojure 99 problems
+
+Me futzing around with the 99 problems and sharing my embarassing-slight knowledge of Clojure style.
+
+Problems 1-10 available now :-)
+
+== Meta
+
+Written by Chris Chandler(http://chrischandler.name) of Flatterline(http://flatterline.com)
+
+Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
+
+Main page: http://github.com/cchandler/clojure-99-problems
+
