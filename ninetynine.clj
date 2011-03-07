@@ -81,3 +81,90 @@
   ([[x & more]] (concat[ [(mycountlist x) (mylast x) ]]  (if (= more nil) nil (runlengthencode more) ) ) )
 )
 (runlengthencode (packconsecutive [1 2 2 2 3 3 4 4 4 \a \a \a]))
+
+;P11 (*) Modified run-length encoding.
+;Modify the result of problem 1.10 in such a way that if an element has no duplicates it is simply copied into the result list. Only elements with duplicates are transferred as [N,E] terms.
+
+(defn runlengthencode2
+  ([[x & more]] 
+	(concat[  (if (= (mycountlist x) 1) (mylast x) [(mycountlist x) (mylast x)] )   ] 
+	  (if (= more nil) nil 
+	    (runlengthencode2 more) 
+	  )
+	)
+  )
+)
+(runlengthencode2 (packconsecutive [1 2 2 2 3 3 4 4 4 \a \a \a]))
+
+;P12 (**) Decode a run-length encoded list.
+
+(defn repeat-element
+	[[x,y]]
+	  (concat [y]
+		  (if (<= (- x 1) 0) nil
+			(repeat-element [(- x 1) y])
+		  )
+      ) 
+)
+
+(defn runlengthdecode
+  ([[x & more]] (concat
+	(repeat-element x)
+	(if (= more nil) nil 
+	    (runlengthdecode more) 
+	  )
+	)
+  )
+)
+(runlengthencode (packconsecutive [1 2 2 2 3 3 4 4 4 \a \a \a]))
+(runlengthdecode (runlengthencode (packconsecutive [1 2 2 2 3 3 4 4 4 \a \a \a])))
+
+;P13 (**) Run-length encoding of a list (direct solution).
+;I think I already did this one above
+
+;P14 (*) Duplicate the elements of a list.
+(defn dupelements
+	([[x & more]]
+		(concat
+			(repeat-element [2,x])
+			(if (= more nil) nil 
+			    (dupelements more) 
+			  )
+		)
+	)
+)
+(dupelements [1,2,3,3])
+
+;P15 (**) Duplicate the elements of a list a given number of times.
+(defn dupelementsN
+	([n [x & more]]
+		(concat
+			(repeat-element [n,x])
+			(if (= more nil) nil 
+			    (apply dupelementsN [n more])
+			  )
+		)
+	)
+)
+
+(dupelementsN 3 [1,2,3,3])
+
+;P16 (**) Drop every N'th element from a list.
+(defn dropNth
+	; ([n [x & more]]
+	; 	(apply dropNth [n 0 [(concat x more)] ])
+	; )
+	([n i [x & more]]
+		(concat
+			(if (= (- n 1) i)
+			  nil
+			  [x]
+			)			
+			(if (= more nil)
+			  nil
+			  (apply dropNth [n (if (= (- n 1) i) 0 (+ i 1)) more ])
+			)
+		)
+	)
+)
+(dropNth 2 0 [1,2,3,4,5,6])
